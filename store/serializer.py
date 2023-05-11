@@ -2,23 +2,34 @@ from rest_framework import serializers
 from decimal import Decimal
 from store.models import Product,Collection
 
-class CollectionSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    title = serializers.CharField(max_length = 255)
-
-
-
-
-class ProductSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    title = serializers.CharField(max_length =255)
-    price =serializers.DecimalField(max_digits=6,decimal_places=2,source ='unit_price')
-    price_with_tax = serializers.SerializerMethodField(method_name='calculatax')
-    collection = serializers.HyperlinkedRelatedField(
-        queryset = Collection.objects.all(),
-        view_name= 'collection-detail'
-    )
+class CollectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Collection
+        fields =[ 'id','title','products_count']
     
-    def calculatax(self,product):
+    products_count = serializers.IntegerField(read_only =True)
+    # id = serializers.IntegerField()
+    # title = serializers.CharField(max_length = 255)
+
+
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['id','title','unit_price','description','slug','inventory','price_with_tax','collection']
+    price_with_tax = serializers.SerializerMethodField(method_name='calculatax')
+    
+    
+    def calculatax(self, product):
+        if isinstance(product, dict):
+            unit_price = product.get('unit_price')
+        else:
+            
+            unit_price = product.unit_price
         
-        return product.unit_price * Decimal(1.1)
+        return unit_price * Decimal(1.1)
+
+# def calculatax(self,product:Product):
+        
+#         return product.unit_price * Decimal(1.1)
