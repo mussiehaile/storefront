@@ -37,18 +37,18 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
     'rest_framework',
     'playground',
-    #'debug_toolbar',
-    'django_filters',
+    'debug_toolbar',
     'store',
-    'store_custom',
     'tags',
-    'likes'
+    'likes',
+    'core',
 ]
 
 MIDDLEWARE = [
-    #'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -143,7 +143,7 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'COERCE_DECIMAL_TO_STRING': False,
-    #'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
-    #'PAGE_SIZE': 10
+    'COERCE_DECIMAL_TO_STRING': False
 }
+
+AUTH_USER_MODEL = 'core.User'
